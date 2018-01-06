@@ -1,0 +1,10 @@
+#!/bin/sh
+cat <<EOT | ws $ALMONDPLUS_WEBSOCKET
+{
+	"MobileInternalIndex":"HHTC_SetDeviceIndex",
+	"CommandType":"UpdateDeviceIndex",
+	"ID":"$1",
+	"Index":"$2",
+	"Value":"$3"
+}
+EOT

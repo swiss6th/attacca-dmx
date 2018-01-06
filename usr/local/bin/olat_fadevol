@@ -1,0 +1,45 @@
+#!/bin/bash
+# Yes, it's full of bashisms.
+
+# Usage: fadevol.sh fade_time target_volume
+
+function abort {
+	kill $PLAYER_MONITOR_PID
+	exit 0
+}
+
+pgrep -P $PPID "$0" | grep -Fv $$ | xargs -r kill
+if [[ "$1$2" == '11' ]]; then
+	mpc -h $MPD_SOCKET pause
+	exit 0
+fi
+mpc -h $MPD_SOCKET | grep -m 1 -q '^\[playing\]' || exit 0
+FADE_TIME=$(( ${1:-5} - 1 ))
+TARGET_VOLUME=$(( ${2:-1} - 1 ))
+if [[ $FADE_TIME == '0' ]]; then
+	mpc -h $MPD_SOCKET volume $TARGET_VOLUME
+else
+	START_VOLUME=$( mpc -h $MPD_SOCKET volume )
+	START_VOLUME=${START_VOLUME//[^0-9]}
+	(( START_VOLUME == TARGET_VOLUME )) && exit 0
+	DELTA_VOLUME=$(( TARGET_VOLUME - START_VOLUME ))
+	DELTA_VOLUME="${DELTA_VOLUME#-}"
+	SLEEP_STEP=$( echo "scale=4; $FADE_TIME/($DELTA_VOLUME)" | bc )
+	VOLUME_STEP=$( if (( START_VOLUME < TARGET_VOLUME )); then echo '+1'; else echo '-1'; fi )
+
+	SENTINEL_VOLUME=$TARGET_VOLUME
+	DESIRED_VOLUME=$START_VOLUME
+	mpc -h $MPD_SOCKET idle player && kill $$ &
+	PLAYER_MONITOR_PID=$!
+	trap abort EXIT
+	while (( DESIRED_VOLUME != SENTINEL_VOLUME )); do
+		sleep $SLEEP_STEP
+		REPORTED_VOLUME=$( mpc -h $MPD_SOCKET volume )
+		if (( ${REPORTED_VOLUME//[^0-9]} == DESIRED_VOLUME )); then
+			mpc -h $MPD_SOCKET volume $(( DESIRED_VOLUME += VOLUME_STEP ))
+		else
+			exit 0
+		fi
+	done
+fi
+(( TARGET_VOLUME == 0 )) && mpc -h $MPD_SOCKET pause

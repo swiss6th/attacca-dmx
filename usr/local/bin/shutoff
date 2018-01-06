@@ -1,0 +1,3 @@
+#!/bin/sh
+echo Powering off...
+poweroff

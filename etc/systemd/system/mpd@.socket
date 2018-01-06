@@ -1,0 +1,9 @@
+[Socket]
+ListenStream=/var/run/mpd/%i.socket
+ListenStream=%i
+Backlog=5
+KeepAlive=true
+PassCredentials=true
+
+[Install]
+WantedBy=sockets.target

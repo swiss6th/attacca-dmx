@@ -1,0 +1,3 @@
+#!/bin/sh
+mpc -h $MPD_SOCKET clear
+mpc -h $MPD_SOCKET load playlist$1

@@ -1,0 +1,2 @@
+#!/bin/sh
+mpc -h $MPD_SOCKET volume $(($1 - 1))

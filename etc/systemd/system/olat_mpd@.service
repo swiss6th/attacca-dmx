@@ -1,0 +1,20 @@
+[Unit]
+Description=OLA Trigger for Music Player Daemon @ %i
+PartOf=olat_mpd.target
+BindsTo=olad.service mpd@%i.service
+After=olad.service mpd@%i.service olat_mpd.target
+
+[Service]
+WorkingDirectory=/home/pi
+Environment=MPD_SOCKET=/var/run/mpd/%i.socket LOG_LEVEL=1 TRIGGER_FILE=olat_mpd.trigger
+EnvironmentFile=-/home/pi/olat.environment
+EnvironmentFile=-/home/pi/olat_mpd.environment
+EnvironmentFile=/home/pi/olat_mpd@%i.environment
+ExecStart=/usr/bin/ola_trigger -l $LOG_LEVEL -u $UNIVERSE -o $CHANNEL_OFFSET $TRIGGER_FILE
+StandardOutput=null
+Nice=-5
+Restart=always
+
+[Install]
+WantedBy=olat_mpd.target
+DefaultInstance=6600

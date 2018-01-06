@@ -1,0 +1,8 @@
+[Unit]
+Description=OLA Trigger (all services)
+Wants=olat_mpd.target olat_sys.target
+After=multi-user.target
+StopWhenUnneeded=true
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,2 @@
+#!/bin/sh
+mpc -h $MPD_SOCKET random $1

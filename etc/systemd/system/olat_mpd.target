@@ -1,0 +1,9 @@
+[Unit]
+Description=OLA Trigger for Music Player Daemon (all instances)
+Wants=mpd.target
+PartOf=olat.target
+After=olat.target
+StopWhenUnneeded=true
+
+[Install]
+WantedBy=olat.target

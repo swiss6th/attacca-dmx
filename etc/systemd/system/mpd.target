@@ -1,0 +1,6 @@
+[Unit]
+Description=Music Player Daemon (all instances)
+After=multi-user.target
+
+[Install]
+WantedBy=multi-user.target

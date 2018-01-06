@@ -1,0 +1,2 @@
+#!/bin/sh
+amixer -c $ALSA_CARD set $ALSA_MASTERVOLUME_CTL $(($1 - 1))

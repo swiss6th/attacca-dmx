@@ -1,0 +1,10 @@
+#!/bin/sh
+cat <<EOT | ws $ALMONDPLUS_WEBSOCKET
+{
+	"CommandType":"ActivateScene",
+	"MobileInternalIndex":"HHTC_ActivateScene",
+	"Scenes":{
+		"ID":"$1"
+	}
+}
+EOT

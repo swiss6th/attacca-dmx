@@ -1,0 +1,8 @@
+[Unit]
+Description=OLA Trigger for System Control (all instances)
+PartOf=olat.target
+After=olat.target
+StopWhenUnneeded=true
+
+[Install]
+WantedBy=olat.target

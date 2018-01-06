@@ -1,0 +1,20 @@
+[Unit]
+Description=OLA Trigger for System Control @ %i
+PartOf=olat_sys.target
+BindsTo=olad.service
+After=olad.service olat_sys.target
+
+[Service]
+WorkingDirectory=/home/pi
+Environment=ALSA_CARD=0 ALSA_MASTERVOLUME_CTL=PCM ALMONDPLUS_WEBSOCKET=ws://10.10.10.254:7681/root/admin LOG_LEVEL=1 TRIGGER_FILE=olat_sys.trigger
+EnvironmentFile=-/home/pi/olat.environment
+EnvironmentFile=-/home/pi/olat_sys.environment
+EnvironmentFile=/home/pi/olat_sys@%i.environment
+ExecStart=/usr/bin/ola_trigger -l $LOG_LEVEL -u $UNIVERSE -o $CHANNEL_OFFSET $TRIGGER_FILE
+StandardOutput=null
+Nice=-5
+Restart=always
+
+[Install]
+WantedBy=olat_sys.target
+DefaultInstance=1
