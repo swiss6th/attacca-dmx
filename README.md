@@ -142,7 +142,7 @@ These steps are common to both configurations. Follow these steps, and then foll
 
 ## Steps for Ossia DMX
 
-1. Copy `wait.conf` to `/etc/systemd/system/dhcpcd.d`. It forces `dhcpcd` to wait up to 60 seconds for a DHCP lease, as `olad` will be useless if the Pi has no IP address. This is similar to the **Wait for network at boot** feature in `raspi-config`. Alternatively, you could set a static IP address for the Pi.
+1. Copy `wait.conf` to `/etc/systemd/system/dhcpcd.d`. It forces `dhcpcd` to wait up to 60 seconds for a DHCP lease, as `olad` will be useless if the Pi has no IP address. This is basically the **Wait for network at boot** feature enabled in `raspi-config`, but with a specific timeout. Alternatively, you could set a static IP address for the Pi.
 
 1. Copy `ola-gpio.service` to `/etc/systemd/system`.
 
@@ -152,7 +152,7 @@ These steps are common to both configurations. Follow these steps, and then foll
 
 1. Run `sudo adduser olad gpio`.
 
-1. Run `echo 'SUBSYSTEM=="spidev", MODE="0666"' >> /etc/udev/rules.d/99-spi.rules` (see <https://opendmx.net/index.php/OLA_Device_Specific_Configuration#SPI>).
+1. Run `echo 'SUBSYSTEM=="spidev", MODE="0666"' | sudo tee -a /etc/udev/rules.d/99-spi.rules > /dev/null` (see <https://opendmx.net/index.php/OLA_Device_Specific_Configuration#SPI>).
 
 1. Copy `ola-gpio.conf` to `/etc/ola`. In this file, you may adjust the DMX values to trigger a GPIO pin on/off. You may also change the `gpio_slot_offset` to change the start channel for these pins. Do not touch the `gpio_pins` line. It is set to GPIO connectors soldered to the header (23 and 24, if you followed the standard design for an Ossia DMX Pi). For details on this file, see <https://github.com/OpenLightingProject/ola/tree/master/plugins/gpio/README.md>.
 
