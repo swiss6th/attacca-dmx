@@ -1,24 +1,12 @@
-# Setting Up Attacca DMX & Ossia DMX on a Fresh Raspbian Image
-
-## Common Steps
-
-These steps are common to both configurations. Follow these steps, and then follow the steps specific to the configuration you'd like to set up.
+# Setting Up Attacca DMX on a Fresh Raspbian Image
 
 1. Flash the latest image of Raspbian Lite from raspberrypi.org to your MicroSD card.
 
 1. Add an empty file called `ssh` to the `/boot` directory of the card.
 
-1. If you're setting up Ossia DMX, make these changes in `/boot` as well:
-
-	1. Copy over a `wpa_supplicant` configuration.
-
-	1. Remove `console=serial0,115200` from `cmdline.txt` (see <https://www.raspberrypi.org/forums/viewtopic.php?f=29&t=146291#p978159>).
-
-	1. Add `dtoverlay=spi1-1cs` to `config.txt`.
-
 1. Eject the card and insert it into your Pi
 
-1. If you're setting up Attacca DMX, plug in your USB sound dongle.
+1. Plug in your USB sound card.
 
 1. Connect power to the system.
 
@@ -46,8 +34,6 @@ These steps are common to both configurations. Follow these steps, and then foll
 
 	1. Set video memory allocation to the minimum of 16 MB.
 
-	1. If you're setting up Ossia DMX, enable SPI.
-
 1. Reboot.
 
 1. Run `sudo apt-get update && sudo apt-get upgrade`.
@@ -57,15 +43,8 @@ These steps are common to both configurations. Follow these steps, and then foll
 1. Disable unneeded plugins in OLA (e.g., at <http://sfx-player.local:9090>). You can do this by navigating to **New UI** (from the bottom of the page). From the **Plugins** tab, uncheck all plugins except the following:
 
 	- **E1.31 (sACN)** or **ArtNet**, depending on your preferred DMX input
-	- **GPIO** (for Ossia DMX only)
-	- **SPI** (for Ossia DMX only)
 
 	If you need any of the other plugins, of course, leave them enabled.
-
-1. Proceed to the appropriate section below.
-
-
-## Steps for Attacca DMX
 
 1. Create the directories `/home/pi/music` and `/home/pi/playlists`.
 
@@ -133,29 +112,8 @@ These steps are common to both configurations. Follow these steps, and then foll
 
 1. Run `sudo systemctl daemon-reload`. (Also do this whenever you've changed the `systemd` drop-ins mentioned in the last 3 steps.)
 
-1. Set up your DMX universes in OLA (e.g., at <http://sfx-player.local:9090/>). This guide assumes you'll set up at least 2 universes. All the `olat_mpd@.service` daemons, as well as `olat_sys@1.service`, require Universe 1. `olat_sys@2.service` requires Universe 2. These requirements are configured in the various `.environment` files copied to `/home/pi`. Adjust them as needed.
+1. Set up your DMX universes in OLA (e.g., at <http://sfx-player.local:9090/>). This guide assumes you'll set up at least 2 universes. All the `olat_mpd@.service` daemons, as well as `olat_sys@1.service`, require Universe 1. `olat_sys@2.service` requires Universe 2. These requirements are configured in the various `*.environment` files copied to `/home/pi`. Adjust them as needed.
 
 1. Run `sudo systemctl enable olat.target`.
-
-1. Reboot.
-
-
-## Steps for Ossia DMX
-
-1. Copy `wait.conf` to `/etc/systemd/system/dhcpcd.d`. It forces `dhcpcd` to wait up to 60 seconds for a DHCP lease, as `olad` will be useless if the Pi has no IP address. This is basically the **Wait for network at boot** feature enabled in `raspi-config`, but with a specific timeout. Alternatively, you could set a static IP address for the Pi.
-
-1. Copy `ola-gpio.service` to `/etc/systemd/system`.
-
-1. Run `sudo systemctl daemon-reload`.
-
-1. Run `sudo systemctl stop olad`.
-
-1. Run `sudo adduser olad gpio`.
-
-1. Run `echo 'SUBSYSTEM=="spidev", MODE="0666"' | sudo tee -a /etc/udev/rules.d/99-spi.rules > /dev/null` (see <https://opendmx.net/index.php/OLA_Device_Specific_Configuration#SPI>).
-
-1. Copy `ola-gpio.conf` to `/etc/ola`. In this file, you may adjust the DMX values to trigger a GPIO pin on/off. You may also change the `gpio_slot_offset` to change the start channel for these pins. Do not touch the `gpio_pins` line. It is set to GPIO connectors soldered to the header (23 and 24, if you followed the standard design for an Ossia DMX Pi). For details on this file, see <https://github.com/OpenLightingProject/ola/tree/master/plugins/gpio/README.md>.
-
-1. Copy `ola-spi.conf` to `/etc/ola`. This is a sample configuration file. It sets up 3 segments of 2 APA102 pixels each on SPI0, as well as 2 segments of 2 APA102 pixels each on SPI1. For details on this file, see <https://github.com/OpenLightingProject/ola/tree/master/plugins/spi/README.md>.
 
 1. Reboot.

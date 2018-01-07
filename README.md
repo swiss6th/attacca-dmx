@@ -11,6 +11,7 @@ Attacca DMX is a project that allows for DMX control over remote audio players a
 - Playback options (shuffle, repeat, single, consume, crossfade)
 - Automated volume fades
 - Multiple instances of the music player, all sharing the same audio library
+- Apple AirPlay audio receiver
 - State control of smart home devices (just on/off so far)
 - Multiple instances of the smart home controller
 
