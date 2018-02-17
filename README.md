@@ -5,6 +5,7 @@ Attacca DMX is a project that allows for DMX control over remote audio players a
 ## Features
 
 - Playback control (play, pause, stop)
+- Shuttle control (seek)
 - Playlist selection
 - Track selection
 - Volume control
@@ -39,3 +40,4 @@ This project would not be possible without these truly excellent platforms:
 
 - [Open Lighting Architecture](https://www.openlighting.org/ola/)
 - [Music Player Daemon](https://www.musicpd.org)
+- [Almond+](https://www.securifi.com/almondplus)
