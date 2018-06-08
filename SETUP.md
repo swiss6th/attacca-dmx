@@ -50,6 +50,8 @@
 
 1. Run `chgrp audio /home/pi/music /home/pi/playlists`.
 
+1. Run `chmod g+w /home/pi/music /home/pi/playlists`.
+
 1. Copy `asound.conf` to `/etc`.
 
 1. Reboot.
